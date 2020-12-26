@@ -4,7 +4,7 @@ from tools import Tools
 from keyboards import menu_kb, back_to_menu_button
 from random import choice
 from filters import new_user_filter
-from .texts import main_menu_texts, welcome_text
+from texts import main_menu_texts, welcome_text
 
 
 def new_user_callback(update: Update, context: CallbackContext):

@@ -3,7 +3,7 @@ from telegram.ext import CallbackContext, MessageHandler, ConversationHandler, F
 from tools import Tools, countries_dict, reverse_countries_dict, emojified_countries_list
 from keyboards import menu_keyboard, back_to_menu_kb, rent_number_button, pagination_kb, \
     change_service_bttn, phone_buttons
-from .texts import rent_header, rent_form, service_unsupported_text, low_balance_text, phone_form,\
+from texts import rent_header, rent_form, service_unsupported_text, low_balance_text, phone_form,\
     phone_stripped_form
 from main_screen.handlers import menu_handler, back_to_menu_handler
 from wrapper.api_core import backend

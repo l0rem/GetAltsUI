@@ -2,7 +2,7 @@ from telegram import Update, ParseMode, ReplyKeyboardMarkup
 from telegram.ext import CallbackContext, MessageHandler, ConversationHandler, Filters
 from tools import Tools
 from keyboards import menu_keyboard, back_to_menu_button, back_button, topup_button, topup_options
-from .texts import balance_form, balance_header
+from texts import balance_form, balance_header
 from main_screen.handlers import menu_handler, back_to_menu_handler
 
 VIEWING_BALANCE = range(1)
