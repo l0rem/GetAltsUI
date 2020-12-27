@@ -5,6 +5,7 @@ from keyboards import menu_kb, back_to_menu_button
 from random import choice
 from filters import new_user_filter
 from texts import main_menu_texts, welcome_text
+from loguru import logger
 
 
 def new_user_callback(update: Update, context: CallbackContext):
@@ -27,12 +28,17 @@ def menu_callback(update: Update, context: CallbackContext):
 
     phrase = choice(main_menu_texts)
 
-    to_delete = context.chat_data.get('messages_to_delete')
+    to_delete = context.chat_data.get('messages_to_delete', [])
 
-    if to_delete is not None and len(to_delete) >= 1:
+    if to_delete:
         for msg in to_delete:
-            context.bot.delete_message(chat_id=uid,
-                                       message_id=msg)
+            try:
+                context.bot.delete_message(
+                    chat_id=uid,
+                    message_id=msg
+                )
+            except:
+                loguru.exception(f"An error occured trying to delete message {msg} for user {uid}.")
 
     context.chat_data['messages_to_delete'] = []
 
