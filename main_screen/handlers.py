@@ -4,8 +4,7 @@ from tools import Tools
 from keyboards import menu_kb, back_to_menu_button
 from random import choice
 from filters import new_user_filter
-from texts import main_menu_texts, welcome_text
-from loguru import logger
+from .texts import main_menu_texts, welcome_text
 
 
 def new_user_callback(update: Update, context: CallbackContext):
@@ -20,6 +19,8 @@ def new_user_callback(update: Update, context: CallbackContext):
                              parse_mode=ParseMode.HTML)
 
     menu_callback(update, context)
+
+    return ConversationHandler.END
 
 
 def menu_callback(update: Update, context: CallbackContext):
@@ -38,7 +39,7 @@ def menu_callback(update: Update, context: CallbackContext):
                     message_id=msg
                 )
             except:
-                loguru.exception(f"An error occured trying to delete message {msg} for user {uid}.")
+                logger.exception(f"An error occured trying to delete message {msg} for user {uid}.")
 
     context.chat_data['messages_to_delete'] = []
 

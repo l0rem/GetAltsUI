@@ -33,7 +33,7 @@ change_service_bttn = InlineKeyboardButton(text=change_service_button,
 
 phone_buttons = ['\U0001F4E8 SMS sent', '\U0000274C Cancel', '\U00002714 Done', '\U0001F501 One more SMS']
 
-topup_button = 'Top Up'
+topup_button = '💳 Top Up'
 
-topup_options = ['TelegramPay']
+topup_options = ['💸 TelegramPay']
 

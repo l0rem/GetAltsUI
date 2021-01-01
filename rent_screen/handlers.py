@@ -3,12 +3,13 @@ from telegram.ext import CallbackContext, MessageHandler, ConversationHandler, F
 from tools import Tools, countries_dict, reverse_countries_dict, emojified_countries_list
 from keyboards import menu_keyboard, back_to_menu_kb, rent_number_button, pagination_kb, \
     change_service_bttn, phone_buttons
-from texts import rent_header, rent_form, service_unsupported_text, low_balance_text, phone_form,\
+from .texts import rent_header, rent_form, service_unsupported_text, low_balance_text, phone_form,\
     phone_stripped_form
 from main_screen.handlers import menu_handler, back_to_menu_handler
 from wrapper.api_core import backend
 from wrapper.datatype import SmsTypes
 from datetime import datetime, timedelta
+from telegram.error import BadRequest
 
 
 VIEWING_RENT_MENU = range(1)
@@ -99,9 +100,18 @@ def change_country_callback(update: Update, context: CallbackContext):
 
     keyboard.append([next_inline_button])
 
-    context.bot.edit_message_reply_markup(chat_id=uid,
-                                          message_id=update.effective_message.message_id,
-                                          reply_markup=InlineKeyboardMarkup(keyboard))
+    kb = InlineKeyboardMarkup(keyboard)
+
+    try:
+
+        context.bot.edit_message_reply_markup(chat_id=uid,
+                                              message_id=update.effective_message.message_id,
+                                              reply_markup=kb)
+    except BadRequest:
+
+        context.bot.send_message(chat_id=uid,
+                                 text=update.effective_message.text,
+                                 reply_markup=kb)
 
     return VIEWING_RENT_MENU
 
@@ -232,7 +242,10 @@ def change_service_callback(update: Update, context: CallbackContext):
 
     free_numbers = context.chat_data['free_numbers']
 
-    services = sorted(list(free_numbers.keys()), key=str.lower)
+    names = list(free_numbers.keys())
+    if None in names:
+        names.remove(None)
+    services = sorted(names, key=str.lower)
 
     context.chat_data['services_list'] = services
 
@@ -294,9 +307,17 @@ def switch_service_page_callback(update: Update, context: CallbackContext):
     for i in range(page * 15, upper_range, 3):
         sublist = list()
         for k in range(3):
-            button = InlineKeyboardButton(text=services[i + k],
-                                          callback_data='select_service:{}'.format(services[i + k]))
-            sublist.append(button)
+
+            try:
+                button = InlineKeyboardButton(text=services[i + k],
+                                              callback_data='select_service:{}'.format(services[i + k]))
+                sublist.append(button)
+
+            except IndexError:
+                print(i+k)
+                print(len(services))
+                pass
+
         keyboard.append(sublist)
 
     keyboard.append(lower_row)
@@ -668,5 +689,5 @@ rent_conversation_handler = ConversationHandler(
 
     fallbacks=[menu_handler],
     name='Rent',
-    persistent=True
+    persistent=False
 )

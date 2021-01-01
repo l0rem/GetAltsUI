@@ -2,7 +2,7 @@ from telegram import Update, ParseMode, ReplyKeyboardMarkup
 from telegram.ext import CallbackContext, MessageHandler, ConversationHandler, Filters
 from tools import Tools
 from keyboards import menu_keyboard, back_to_menu_button, back_button, topup_button, topup_options
-from texts import balance_form, balance_header
+from .texts import balance_form, balance_header
 from main_screen.handlers import menu_handler, back_to_menu_handler
 
 VIEWING_BALANCE = range(1)
@@ -17,7 +17,8 @@ def balance_callback(update: Update, context: CallbackContext):
     user_balance = Tools.get_balance(user)
 
     balance_kb = ReplyKeyboardMarkup([[topup_button],
-                                      [back_to_menu_button]])
+                                      [back_to_menu_button]],
+                                     resize_keyboard=True)
 
     context.bot.send_message(chat_id=uid,
                              text=balance_header,
@@ -40,7 +41,8 @@ def top_up_menu_callback(update: Update, context: CallbackContext):
     uid = Tools.get_uid(update)
 
     top_up_options_kb = ReplyKeyboardMarkup([[topup_options[0]],
-                                             [back_button]])
+                                             [back_button]],
+                                            resize_keyboard=True)
 
     text = '<b>Please, choose one of the following payment methods:</b>'
 
@@ -79,5 +81,5 @@ balance_conversation_handler = ConversationHandler(
 
     fallbacks=[menu_handler],
     name='Balance',
-    persistent=True
+    persistent=False
 )
