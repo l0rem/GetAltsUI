@@ -5,6 +5,9 @@ from keyboards import menu_kb, back_to_menu_button
 from random import choice
 from filters import new_user_filter
 from .texts import main_menu_texts, welcome_text
+import logging
+
+logger = logging.getLogger()
 
 
 def new_user_callback(update: Update, context: CallbackContext):
@@ -38,7 +41,8 @@ def menu_callback(update: Update, context: CallbackContext):
                     chat_id=uid,
                     message_id=msg
                 )
-            except:
+            except Exception as e:
+                print(e)
                 logger.exception(f"An error occured trying to delete message {msg} for user {uid}.")
 
     context.chat_data['messages_to_delete'] = []
