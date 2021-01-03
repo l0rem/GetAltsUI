@@ -1,7 +1,7 @@
 from telegram.ext import Updater, CommandHandler
 from decouple import config
 from main_screen.handlers import menu_handler, new_user_handler
-from balance_screen.handlers import balance_conversation_handler
+from balance_screen.handlers import balance_conversation_handler, precheckout_handler, tgpay_success_handler
 from rent_screen.handlers import rent_conversation_handler
 from help_screen.handlers import help_conversation_handler
 from settings_screen.handlers import settings_conversation_handler
@@ -60,5 +60,7 @@ if __name__ == '__main__':
     bot.dispatcher.add_handler(settings_conversation_handler)
     bot.dispatcher.add_handler(api_conversation_handler)
     bot.dispatcher.add_handler(menu_handler)
+    bot.dispatcher.add_handler(precheckout_handler)
+    bot.dispatcher.add_handler(tgpay_success_handler)
     bot.updater.start_polling()
     bot.updater.idle()
